@@ -1,6 +1,7 @@
 package com.pluralsight.conferencedemo.repositories;
 
 import com.pluralsight.conferencedemo.models.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -12,29 +13,27 @@ public class SessionRepository {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Autowired
+    private SessionJPARepository sessionJPARepository;
+
     public Session create(Session session) {
-        entityManager.persist(session);
-        entityManager.flush();
-        return session;
+        return update(session);
     }
 
     public Session update(Session session) {
-        session = entityManager.merge(session);
-        entityManager.flush();
-        return session;
+        return sessionJPARepository.saveAndFlush(session);
     }
 
     public void delete(Long id) {
-        entityManager.remove(find(id));
-        entityManager.flush();
+        sessionJPARepository.deleteById(id);
     }
 
     public Session find(Long id) {
-        return entityManager.find(Session.class, id);
+        return sessionJPARepository.findById(id).orElse(null);
     }
 
     public List<Session> list() {
-        return entityManager.createQuery("select s from Session s").getResultList();
+        return sessionJPARepository.findAll();
     }
 
     public List<Session> getSessionsThatHaveName(String name) {
