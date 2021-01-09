@@ -1,7 +1,6 @@
 package com.pluralsight.conferencedemo.models;
 
 import com.pluralsight.conferencedemo.repositories.SpeakerJPARepository;
-import com.pluralsight.conferencedemo.repositories.SpeakerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.junit.jupiter.api.Test;
@@ -82,6 +81,11 @@ public class SpeakerTest {
     @Test
     public void testFindFirstByFirstName(){
         assertNotNull(repository.findFirstByFirstName("James"));
+    }
+
+    @Test
+    public void testGetSpeakersBySessionName(){
+        assertTrue(repository.getSpeakersBySessionName("java").size() > 0);
     }
 
 }
