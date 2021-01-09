@@ -10,8 +10,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.util.Arrays;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 public class SpeakerTest {
@@ -46,6 +47,41 @@ public class SpeakerTest {
         assertEquals("Dan", otherSpeaker.getFirstName());
 
         repository.deleteById(otherSpeaker.getSpeakerId());
+    }
+
+    @Test
+    public void testFindByFirstNameAndLastName(){
+        assertFalse(repository.findByFirstNameAndLastName("Justin", "Clark").isEmpty());
+    }
+
+    @Test
+    public void testFindByFirstNameOrLastName(){
+        assertFalse(repository.findByFirstNameOrLastName("Justin", "Clark").isEmpty());
+    }
+
+    @Test
+    public void testFindBySpeakerPhotoIsNull(){
+        assertFalse(repository.findBySpeakerPhotoIsNull().isEmpty());
+    }
+
+    @Test
+    public void testFindByCompanyIn(){
+        assertEquals(2, repository.findByCompanyIn(Arrays.asList("Bank Europe", "Big Data Consulting")).size());
+    }
+
+    @Test
+    public void testFindByCompany(){
+        assertEquals(3, repository.findByCompanyStartingWithIgnoreCase("cLoUd").size());
+    }
+
+    @Test
+    public void testFindByLastNameOrderByFirstName(){
+        assertEquals(3, repository.findByCompanyStartingWithIgnoreCase("cLoUd").size());
+    }
+
+    @Test
+    public void testFindFirstByFirstName(){
+        assertNotNull(repository.findFirstByFirstName("James"));
     }
 
 }
